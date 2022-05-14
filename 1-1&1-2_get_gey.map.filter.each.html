@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1-1 practice</title>
+</head>
+
+<body>
+  <script>
+    // 순수함수
+    // 외부 값을 변경 하지 않는다 -> list 같은 인자로 받아서 사용한다
+    // 변화된 값을 새롭게 리턴한다
+    // 인자로 list를 받는다, 어떤 기능을 하는 함수를 인자에 저장하고 실행하는 코딩을 한다. 
+    // 크게 절차지향적으로 기능을 알기 쉽게 작성 후, 함수형으로 리펙토링 한다 
+    var users = [
+      { id: 1, name: "ID", age: 32 },
+      { id: 2, name: "HA", age: 25 },
+      { id: 3, name: "BJ", age: 32 },
+      { id: 4, name: "PJ", age: 28 },
+      { id: 5, name: "JE", age: 27 },
+      { id: 6, name: "JM", age: 32 },
+      { id: 7, name: "HI", age: 24 }
+    ];
+    function _map(list, mapper) {
+      const new_list = [];
+      for(let i = 0, leng = list.length; i < leng; i++) {
+        new_list.push(mapper(list[i]));
+      }
+      return new_list;
+    }
+    function get_key(key) {
+      // key = 'a'
+      console.log('get_name', key);
+      return function(obj) { //클로저
+        console.log('get_name obj ', obj);
+        return obj[key];
+      }
+    }
+
+    function _filter(list, predi) {
+      const new_list = [];
+      _each(list, (v)=>{
+        if(predi(v)) new_list.push(v);
+      })
+      return new_list;
+    }
+
+    function log_length(value) {
+      console.log(value.length);
+      return value;
+    }
+
+    function _each(list, repeater) {
+      for(let i = 0, leng = list.length; i < leng; i++) {
+        repeater(list[i]); //(v)
+      }
+      return list
+    }
+
+    const new_filter_list = _filter(users, (v)=>v.age < 30);
+    console.log('new_filter_list == ',new_filter_list);
+
+    const new_mapper_and_filter = log_length(_map(
+      _filter(users, (v)=>v.age < 30),
+      (v)=>v.name
+    ));
+    console.log('new_mapper_and_filter == ',new_mapper_and_filter);
+
+    const new_mapper_and_filter_and_get = log_length(
+      _map(
+        _filter(users, (v)=>v.age < 30),
+        get_key('name')
+      )
+    );
+    console.log('new_mapper_and_filter_and_get == ',new_mapper_and_filter_and_get);
+  </script>
+</body>
+
+</html>

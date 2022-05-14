@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2-3</title>
+</head>
+<body>
+  <script>
+    // this, call, apply 
+    // call, apply, () ==> 함수를 실행하는방법 
+    // 2.3-함수-실행과-인자-그리고-점-다시보기.html && 79P 확인
+    const obj = {};
+    obj['name'] = 'wooram';
+    obj.this_test = this_test;
+
+    const arr = [];
+    arr.test = this_test;
+
+    function fnc() {
+      console.log('haha fnc');
+    }
+    fnc.test = this_test
+    function this_test() {
+      return this();
+    }
+    console.log(fnc.test());
+
+    // call, apply 
+    fnc.call(null)
+  </script>
+
+  <script>
+    const obj1 = {a : 1}
+    // call, apply 첫번째 인자에 false 헤당하는 값을 넣으면 window 이다 
+    function test(a, b, c) {
+      console.log("a b c: ", a, b, c);
+      console.log('this:', this);
+      console.log('arguments:', arguments);
+    } 
+    test.call(1, 1,2,3);
+
+    const wooramwooram = (function() {
+      console.log('leng1', arguments.length, arguments);
+      arguments.length--;
+      console.log('leng2', arguments.length, arguments);
+
+      test.apply(1000, arguments);
+    })(3, 2, 1);
+
+    console.log(wooramwooram);
+  </script>
+
+  <script>
+    var slice = Array.prototype.slice;
+    function toArray(data) {
+      return slice.call(data);
+    }
+    function rest(data, n) {
+      console.log('rest func', data, n)
+      return slice.call(data, n || 1);
+    }
+    console.log(toArray({0: 1, 1: 2, length: 2}));
+    console.log(rest([1,2,3,4], 2)); 
+
+    
+    // function f(arr, v) {
+    //   if(arr.length) {
+    //     v += arr.unshift();
+    //     return f(arr, v);
+    //   }
+    //   return v;
+    // }
+    // console.log(f([1,2,3], 0));
+
+    // (function h(arr, v) {
+    //   if(arr.length) {
+    //     v += arr.unshift();
+    //     return h(arr, v);
+    //   }
+    //   return v;
+    // })([1, 2, 3], 0)
+    // const a = false;
+
+    // var c = a ? 10 : function f(arr, v) {
+    // if (!arr.length) return v;
+    // v += arr.shift();
+    // return f(arr, v);
+    // } ([1, 2, 3], 0);
+
+    // console.log(c);
+
+
+    // 삼항연산자, 재귀를 이용하여 배열안의 값을 더한값을 리턴 
+    function f(arr, v) {
+      if(!arr.length) return v;
+
+      v += arr.shift();
+      return f(arr, v);
+    }
+
+    function j(arr, v){
+      return !arr.length ? v : j(arr, v += arr.shift());
+    }
+
+    console.log(f([1, 2, 3], 0));
+    console.log(j([1, 2, 3], 0));
+  </script>
+</body>
+</html>

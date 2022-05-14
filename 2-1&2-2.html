@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2-1</title>
+
+  <script src="./underscore.js"></script>
+</head>
+<body>
+  <script>
+    var obj2 = { " a a a ": 1 };
+    console.log(obj2)
+    console.log(obj2[' a a a ']);
+
+    const obj1 = {
+      1 : 'first',
+      [true ? 2 : 1] : 'second' //ES6 에서는 [안에서 JS를 사용 가능하다]
+    };
+    console.log(obj1[!true ? 1 : 2]); // 객체의 값을 호출 할떄 js 를 사용가능하다 
+    obj1.a = 1;
+    console.log(obj1);
+
+    function fnc() {};
+    fnc.a = 1;
+    console.log(fnc['a']);
+
+    var obj10 = [];
+    obj10.a = 1;
+
+    console.log(obj10);
+
+    var obj12 = [];
+    obj12.length = 5;
+    console.log(obj12);
+
+    var obj13 = [1, 2];
+obj13[5] = 5;
+console.log(obj13);
+// [1, 2, 5: 5]
+console.log(obj13, obj13.length);
+
+console.time('start')
+var l = 100000;
+var list = [];
+for (var i = 0; i < l; i++) { list.push(i); }
+console.timeEnd('start')
+
+console.time('start2')
+var l2 = 100000;
+var list2 = Array(l);
+for (var i = 0; i < l2; i++) { list2[i] = i; }
+console.timeEnd('start2')
+
+
+console.log(Array.apply(null, { length: 3 }));
+
+console.log(obj13['len' + 'gth']);
+
+obj13['len' + 'gth'] = 10;
+console.log(obj13.length);
+
+obj13.push(11);
+console.log(obj13);
+
+const obj00 = {a: 1};
+console.log(obj00);
+delete obj00.a
+console.log(obj00);
+
+var arr1 = [1, 2, 3];
+arr1.push(4);
+
+
+console.log(add1, add2);
+
+function add1(a, b) {
+  return a + b;
+}
+var add2 = function(a, b) {
+  return a + b;
+};
+  </script>
+
+<script>
+  console.log('-------------------------------------------------------');
+  function f1() {
+    return function() {
+    }
+  }
+  a = f1();
+  console.log('asd', a);
+  new function() {
+    console.log(1);
+    // 1
+  };
+  1 ? function(a) {
+    console.log(a);
+    // 1
+  }(1) : 5;
+
+  
+</script>
+<script>
+  console.log('-------------------------------------------------------');
+var a = function(a) {
+  console.log(this, a);
+  // [1], 1
+}.call([1], 1);
+</script>
+
+<script>
+  console.log('-------------------------------------------------------');
+  function L(str) {
+    var splitted = str.split('=>');
+    splitted[0] = splitted[0].trim();
+    console.log(splitted);
+    return new Function(splitted[0].trim(), 'return (' + splitted[1] + ');');
+  }
+
+  L('n => n * 10')(10);
+
+  // 
+
+  function _substr(str, number) {
+    const newStr = [];
+    if(!number) return str;
+
+    for(let i = 0; i < number; i++) {
+      newStr.push(str[i]);
+    }
+    return newStr.join('');
+  }
+  console.log(_substr('abdasdasdas'));
+
+  // 70p 부터~
+  function L2(str) {
+    if (L2[str]) return L2[str]; // (1) 혹시 이미 같은 `str`로 만든 함수가 있다면 즉시 리턴
+    var splitted = str.split('=>');
+    return L2[str] = new Function(splitted[0], 'return (' + splitted[1] + ');'); // function(v,i) { return i * 2 }
+    // 함수를 만든 후 L2[str]에 캐시하면서 리턴
+  }
+  var arr = Array(10);
+  console.log(_.map(arr, function(v, i) {
+    return L2('v, i => i * 2')(v, i);
+  }));
+</script>
+
+<script>
+  // 유명 함수 => 이름이 있는 함수 => 재귀 함수를 만들때 편함 => 자바스크립트에서의 재귀함수 성능이 좋지않지만, 비동기상황에서는 쓸만 하다
+  const fnc0101 = function f() {
+    console.log(fnc0101);
+    console.log('asd');
+
+  }
+  fnc0101();
+
+  function fnc0102() {
+    console.log(arguments.callee);
+  }
+  fnc0102 = 'a';
+
+  console.log(fnc0102);
+
+  function aaaaa(a) {
+    return a
+  }
+
+  const aaaa1 = aaaaa;
+  aaaaa = null;
+
+  console.log('눌 했는데 참조는?? ', aaaa1);
+
+  var hi = 1;
+var hello = function hi() { // hello.name === 'hi'
+  console.log(hi);
+};
+
+console.log(hello, hello.name);
+</script>
+
+<script>
+  function a() {
+    return function f(){
+      console.log(f);
+    }()
+  }
+
+  a();
+
+  function b() {
+    console.log(b);
+  }
+  b()
+</script>
+
+<script>
+  function flatten(arr) {
+  return function f(arr, new_arr) { // (1)
+    arr.forEach(function(v) {
+      Array.isArray(v) ? f(v, new_arr) : new_arr.push(v); // (3)
+    });
+    return new_arr;
+  }(arr, []); // (2)
+}
+  function a(arr){
+    return function f(arr, new_arr){
+      for(let i = 0, leng = arr.length; i < leng; i++) {
+        if(Array.isArray(arr[i])) {f(arr[i], new_arr)}
+        else new_arr.push(arr[i])
+      }
+      console.log(new_arr);
+      return new_arr;
+    }(arr, [])
+  }
+
+  console.log(a([[[1]],2,3,4,5])); 
+  console.log()
+
+
+</script>
+</body>
+</html>

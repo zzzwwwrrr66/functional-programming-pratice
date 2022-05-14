@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1-4 closer, 고차함수</title>
+</head>
+<body>
+  <script>
+    /*
+    ## 클로저를 사용할 떄 
+    1. 이전 상황을 나중에 일어날 상황과 이어 나갈 때
+    2. 함수로 함수를 만들거나 부분 적용을 할 때
+     */
+    function f9() {
+      let a = 10;
+      let f10 = function(c) {
+        return a + b + c;
+      };
+      let b = 20;
+      return f10;
+    }
+    var f11 = f9();
+    console.log(f11(30));
+
+    /*
+    고차함수 
+    1. 함수를 인자로 받아 대신 실행하는 함수
+    2. 함수를 리턴하는 함수
+    3. 함수를 인자로 받아서 또 다른 함수를 리턴하는 함수
+    */
+    const test_arr = [
+      { id: 2, name: "HA", age: 25 },
+      { id: 4, name: "PJ", age: 28 },
+      { id: 5, name: "JE", age: 27 }
+    ]
+
+    // _callWith 함수는 val1 저장 하고  클로저함수를 리턴해주는 함수이다
+    function _callWith(val1) {
+      return function(val2, func) {
+        return func(val1, val2);
+      }
+    }
+
+    function _get (list, key) {
+      return list[key];
+    }
+
+    console.log( _callWith(test_arr)(1, _get)); // {id: 4, name: 'PJ', age: 28}
+
+    // bind, call, apply 에 대해서 공부 
+
+    Function.prototype.partial = function() {
+      var fn = this, // fn 이 객체가 되면서 함수가 this 가 될수있다, 곧 함수도 객체이다
+      args = Array.prototype.slice.call(arguments); // (1)
+      return function() { // (2)
+        var arg = 0;
+        for (var i = 0; i < args.length && arg < arguments.length; i++) // (5)
+          if (args[i] === undefined) args[i] = arguments[arg++]; // (6)
+        console.log(fn, this);
+        return fn.apply(this, args);
+      };
+    };
+
+    function abc(a, b, c) {
+        console.log(a, b, c);
+      }
+
+      var ac = abc.partial(undefined, 'b', undefined); // (3)
+      ac('a', 'c'); // (4)
+
+
+      function testwooram() {
+        const fn = this
+        return function(){
+          console.log(fn);
+        }
+      }
+
+      testwooram.partial()();
+  </script>
+</body>
+</html>
